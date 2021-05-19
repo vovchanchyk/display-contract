@@ -197,6 +197,12 @@ img {
   margin-top: 60px;
   padding-top: 0;
 }
+.app__loading {
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .app__group {
   margin-bottom: 40px;
 }
