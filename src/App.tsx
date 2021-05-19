@@ -1,24 +1,27 @@
-import React from 'react';
-import logo from './logo.svg';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+
 import './App.css';
+import Empty from './components/Empty';
+import Header from './components/Header';
+import Result from './components/Result';
+import dataActionCreator from './store/actions/dataActionCreator';
+import useTypedSelector from './typedSelector';
 
 function App() {
+  const dispatch = useDispatch();
+  const error = useTypedSelector((state) => state.error);
+
+  useEffect(() => {
+    dispatch(dataActionCreator());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <Header />
+      {error ? (<Empty />) : (<Result />)}
+
     </div>
   );
 }
