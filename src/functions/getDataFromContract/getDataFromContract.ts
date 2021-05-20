@@ -33,10 +33,9 @@ type IndexType = {
 const adrs = '0x4f7f1380239450AAD5af611DB3c3c1bb51049c29';
 
 const web3 = new Web3('https://ropsten.infura.io/v3/c07b6632ca334279b7d83bb0ba4580fa');
-// const contract = new web3.eth.Contract(ABI,adrs)
+const contract = new web3.eth.Contract(ABI, adrs);
 
 function getCardsPromise(arr: string[][]) {
-  const contract = new web3.eth.Contract(ABI, adrs);
   const promises = arr.map((arr) => arr.map((i: any) => contract.methods.getIndex(i).call().then((ress: any) => ress)));
   const ress = promises.map(async (promises) => {
     const data = await Promise.all(promises).then((data) => data);
@@ -46,15 +45,12 @@ function getCardsPromise(arr: string[][]) {
 }
 
 async function getDataFromContract():Promise<ContractDataType[]> {
-  const contract = new web3.eth.Contract(ABI, adrs);
   const groupIds = await contract.methods.getGroupIds().call().then((ress: any) => ress);
-  // console.log(groupIds)
-  // ,get promisses to use their as promise.all then
   const groupPromises = groupIds.map((Id:string) => contract.methods.getGroup(Id).call().then((ress:GroupType[]) => ress));
   const groups : GroupType[] = await Promise.all(groupPromises).then((ress: GroupType[] | any) => ress);
 
   const groupIndexes = groups.map((el:GroupType) => el.indexes);
-  // console.log(groupIndexes)
+
   const cardsPromises = getCardsPromise(groupIndexes);
 
   const cardsPromise = Promise.all(cardsPromises).then((ress) => ress).then((ress) => ress);
